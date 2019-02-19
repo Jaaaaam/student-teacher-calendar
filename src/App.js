@@ -1,26 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import BigCalendar from 'react-big-calendar'
+import moment from 'moment'
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './style.scss';
+
+// Setup the localizer by providing the moment (or globalize) Object
+// to the correct localizer.
+const localizer = BigCalendar.momentLocalizer(moment) // or globalizeLocalizer
 
 class App extends Component {
+  state = {
+    userType: 'teacher',
+    events: [
+      {
+        id: 8,
+        title: 'Meeting',
+        start: new Date(2019, 1, 12, 14, 0, 0, 0),
+        end: new Date(2019, 1, 12, 15, 0, 0, 0),
+      },
+      {
+        id: 9,
+        title: 'Happy Hour',
+        start: new Date(2019, 0, 22, 17, 0, 0, 0),
+        end: new Date(2019, 0, 22, 17, 30, 0, 0),
+        desc: 'Most important meal of the day',
+      },
+    ]
+  }
+
+  handleUserTypeChange(e) {
+    this.setState({value: e.target.value});
+  }
+
   render() {
+    const { events, userType } = this.state
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <div>
+        <select value={userType} onChange={this.handleUserTypeChange}>
+          <option value="teacher">Teacher</option>
+          <option value="student">Student</option>
+        </select>
+        <br></br>
+        <br></br>
+        <BigCalendar
+          localizer={localizer}
+          events={events}
+          defaultDate={new Date()}
+          startAccessor="start"
+          endAccessor="end"
+        />
+  </div>
     );
   }
 }
