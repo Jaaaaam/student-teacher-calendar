@@ -28,8 +28,16 @@ class App extends Component {
     ]
   }
 
-  handleUserTypeChange(e) {
+  handleUserTypeChange = (e) => {
     this.setState({value: e.target.value});
+  }
+
+  handleEventSelectEvent = (event) => {
+    console.log(event, 'event')
+  }
+
+  handleEventSelectSlot = (slot) => {
+    console.log(slot, 'PARAMS')
   }
 
   render() {
@@ -43,11 +51,13 @@ class App extends Component {
         <br></br>
         <br></br>
         <BigCalendar
+          selectable
           localizer={localizer}
           events={events}
+          defaultView={BigCalendar.Views.WEEK}
           defaultDate={new Date()}
-          startAccessor="start"
-          endAccessor="end"
+          onSelectSlot={this.handleEventSelectSlot}
+          onSelectEvent={this.handleEventSelectEvent}
         />
   </div>
     );
