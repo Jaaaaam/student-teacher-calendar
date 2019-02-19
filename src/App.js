@@ -15,29 +15,64 @@ class App extends Component {
       {
         id: 8,
         title: 'Meeting',
-        start: new Date(2019, 1, 12, 14, 0, 0, 0),
-        end: new Date(2019, 1, 12, 15, 0, 0, 0),
+        start: new Date(2019, 1, 17, 14, 0, 0, 0),
+        end: new Date(2019, 1, 17, 15, 0, 0, 0),
+        status: 'closed'
       },
       {
         id: 9,
-        title: 'Happy Hour',
-        start: new Date(2019, 0, 22, 17, 0, 0, 0),
-        end: new Date(2019, 0, 22, 17, 30, 0, 0),
+        title: 'Class',
+        start: new Date(2019, 1, 18, 17, 0, 0, 0),
+        end: new Date(2019, 1, 18, 17, 30, 0, 0),
         desc: 'Most important meal of the day',
+        status: 'closed'
       },
+      {
+        id: 10,
+        title: 'Class',
+        start: new Date(2019, 1, 19, 17, 0, 0, 0),
+        end: new Date(2019, 1, 19, 17, 30, 0, 0),
+        desc: 'Most important meal of the day',
+        status: 'available'
+      }
     ]
   }
 
   handleUserTypeChange = (e) => {
-    this.setState({value: e.target.value});
+    console.log(e.target.value)
+    this.setState({userType: e.target.value});
   }
 
   handleEventSelectEvent = (event) => {
     console.log(event, 'event')
+    const { userType } = this.state
+    console.log(userType, 'event')
+
+    if (userType === 'student') {
+      alert('class booked!')
+    }
   }
 
-  handleEventSelectSlot = (slot) => {
-    console.log(slot, 'PARAMS')
+  handleEventSelectSlot = ({start, end}) => {
+    console.log(start, end, 'PARAMS')
+    const { userType, events } = this.state
+    console.log(userType, 'type')
+    if (userType === 'teacher' || userType === 'admin') {
+      const title = window.prompt('New Event name')
+      this.setState({
+        events: [
+          ...events,
+          {
+            start,
+            end,
+            title
+          }
+        ]
+      })
+      return;
+    }
+
+    alert('not a class for this sched yet. contact administrator for a clss request')
   }
 
   render() {
@@ -58,6 +93,9 @@ class App extends Component {
           defaultDate={new Date()}
           onSelectSlot={this.handleEventSelectSlot}
           onSelectEvent={this.handleEventSelectEvent}
+          eventPropGetter={event => ({
+            className: event.status 
+          })}
         />
   </div>
     );
